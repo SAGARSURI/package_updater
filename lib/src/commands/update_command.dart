@@ -2,18 +2,13 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
-import 'package:pub_updater/pub_updater.dart';
 
 /// {@template update_command}
 /// A command which updates the CLI.
 /// {@endtemplate}
 class UpdateCommand extends Command<int> {
   /// {@macro update_command}
-  UpdateCommand({
-    required Logger logger,
-    PubUpdater? pubUpdater,
-  })  : _logger = logger,
-        _pubUpdater = pubUpdater ?? PubUpdater() {
+  UpdateCommand({required Logger logger}) : _logger = logger {
     argParser
       ..addOption(
         'packageName',
@@ -30,7 +25,6 @@ class UpdateCommand extends Command<int> {
   }
 
   final Logger _logger;
-  final PubUpdater _pubUpdater;
 
   @override
   String get description => 'Update the installed package.';
@@ -110,8 +104,9 @@ class UpdateCommand extends Command<int> {
     Process.runSync('brew', ['ls', '--versions', packageName, '&>/dev/null']);
     final output = Process.runSync('bash', ['-c', r'echo "$?"']);
     final result = output.stdout.toString().trim();
-    _logger..info(result)
-    ..info("${result.isNotEmpty && result == '0'}");
+    _logger
+      ..info(result)
+      ..info("${result.isNotEmpty && result == '0'}");
     return result.isNotEmpty && result == '0';
   }
 }
