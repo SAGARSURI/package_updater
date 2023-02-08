@@ -105,8 +105,8 @@ class UpdateCommand extends Command<int> {
 
   void _updatePackage() {}
 
+  // TODO(SAGARSURI): Fix this with brew ls --versions packageName
   bool _isValidPackageName(String packageName) {
-    //brew list $1 &>/dev/null;
     Process.runSync('brew', ['ls', '--versions', packageName, '&>/dev/null']);
     final output = Process.runSync('bash', ['-c', r'echo "$?"']);
     final result = output.stdout.toString().trim();
